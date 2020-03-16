@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Image, Dimensions, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
@@ -9,10 +9,14 @@ const Order = ({ navigation, route }) => {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [desc, setDesc] = useState('')
+    const [total, setTotal] = useState(20000)
 
     const { item } = route.params
 
-    console.log(item)
+    useEffect(() => {
+        let total = count * 20000
+        setTotal(total)
+    }, [count])
 
     const sendOrder = () => {
         let model = { name, address, desc, amount: count }
@@ -71,14 +75,18 @@ const Order = ({ navigation, route }) => {
                         <Icon name="plus" size={20} />
                     </View>
                 </TouchableOpacity>
-                <Text style={{ fontSize: 16, marginLeft: 5 }} >Pasang</Text>
+            </View>
+            <Text style={{ fontSize: 12, marginLeft: 5 }} >Pasang</Text>
+            <View style={{ flexDirection: "row" }} >
+                <Text style={{ fontSize: 16, fontWeight: "bold" }} >Total : </Text>
+                <Text>Rp. {total}</Text>
             </View>
             <TouchableOpacity onPress={sendOrder} >
                 <View style={styles.pesanBtn} elevation={3} >
                     <Text style={{ fontSize: 20, fontStyle: "italic", fontWeight: "bold" }} >PESAN</Text>
                 </View>
             </TouchableOpacity>
-        </View >
+        </View>
     )
 }
 
