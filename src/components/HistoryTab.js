@@ -47,7 +47,7 @@ const HistoryTab = ({ navigation }) => {
                         total={item.total}
                         date={item.date}
                         address={item.address}
-                        onPress={() => navigation.navigate('order', { item: item })} />
+                        onPress={() => navigation.navigate('history')} />
                 }
                 keyExtractor={item => item.id}
             />

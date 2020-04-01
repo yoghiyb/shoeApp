@@ -1,26 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, Image, Dimensions, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import axios from 'axios'
+import { AuthContext } from '../settings/Routes'
 
 var { width, height } = Dimensions.get("window")
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, route }) => {
     const [isMitra, handleIsMitra] = useState(false);
-    const [username, handleUsername] = useState('');
+    const [email, handleEmail] = useState('');
     const [password, handlePassword] = useState('');
 
-    // useEffect(() => {
-    //     console.log('didmount');
-    // }, [])
+    // console.log(navigation, route, AuthContext)
 
-    const login = () => {
-        if (username == '' || password == '') {
-            Alert.alert('Username dan Password tidak boleh kosong!')
-        } else {
-            let model = { username, password }
-            navigation.navigate('home', { screen: 'homeTab' });
-        }
-    }
+    const { signIn } = useContext(AuthContext);
 
     return (
         <View style={{ flex: 1, alignItems: "center", alignContent: "center", justifyContent: 'center' }} >
@@ -33,13 +26,13 @@ const Login = ({ navigation }) => {
             <Text style={{ marginBottom: 50, fontSize: 20, fontWeight: "bold" }} > Login {isMitra ? 'Mitra' : 'User'}</Text>
             <View style={{ position: "relative" }} >
                 <Icon name="user-alt" size={30} style={{ position: "absolute", top: 10 }} />
-                <TextInput placeholder="Username" style={style.inputUsername} onChangeText={text => handleUsername(text)} />
+                <TextInput placeholder="Email" style={style.inputUsername} onChangeText={text => handleEmail(text)} />
             </View>
             <View style={{ position: "relative" }} >
                 <Icon name="lock" size={30} style={{ position: "absolute", top: 30 }} />
                 <TextInput placeholder="Password" secureTextEntry={true} style={style.inputPassword} onChangeText={text => handlePassword(text)} />
             </View>
-            <TouchableOpacity onPress={login} >
+            <TouchableOpacity onPress={() => signIn({ email, password, isMitra })} >
                 <View style={style.loginBtn} elevation={2} >
                     <Text style={{ fontSize: 20, fontStyle: "italic", fontWeight: "bold" }} >Login</Text>
                 </View>

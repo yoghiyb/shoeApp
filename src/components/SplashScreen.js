@@ -3,10 +3,11 @@ import { View, Text, Image, Dimensions, ActivityIndicator } from 'react-native'
 
 var { width, height } = Dimensions.get('window')
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
 
     useEffect(() => {
         console.log('didmount')
+        navigation.navigate('login')
     }, [])
     return (
         <View style={{ flex: 1, justifyContent: "center", alignContent: 'center', alignItems: "center" }} >
