@@ -13,7 +13,7 @@ const Login = ({ navigation, route }) => {
 
     // console.log(navigation, route, AuthContext)
 
-    const { signIn } = useContext(AuthContext);
+    const [state, { signIn }] = useContext(AuthContext);
 
     return (
         <View style={{ flex: 1, alignItems: "center", alignContent: "center", justifyContent: 'center' }} >

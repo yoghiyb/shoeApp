@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, Image, Dimensions, ScrollView, FlatList, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+
+import { AuthContext } from '../settings/Routes'
+import axios from 'axios'
 
 var { width, height } = Dimensions.get("window")
 
@@ -37,6 +40,26 @@ const Item = ({ name, description, workTime, address, onPress }) => {
 
 const HomeTab = ({ navigation }) => {
 
+    const [state, { status }] = useContext(AuthContext)
+    const [partner, setPartner] = useState(null)
+
+    console.log(state)
+
+    const getPartner = async () => {
+        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partners`
+        let headers = {
+            'Authorization': `Bearer ${state.userToken}`
+        }
+        let response = await axios.get(endpoint, { headers })
+
+        console.log(response.data)
+    }
+
+    useEffect(() => {
+        getPartner()
+    }, [])
+
+    // console.log(state, status)
     return (
         <View style={{ flex: 1, }} >
             <View style={{ height: 230 }} >

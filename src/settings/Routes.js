@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useReducer, useEffect, useMemo, createContext } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen } from '../components';
+import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop } from '../components';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
@@ -45,34 +45,37 @@ const Home = () => {
     )
 }
 export const AuthContext = createContext();
+
+export const reducer = (prevState, action) => {
+    switch (action.type) {
+        case 'RESTORE_TOKEN':
+            return {
+                ...prevState,
+                userToken: action.token,
+                isLoading: false
+
+            }
+        case 'SIGN_IN':
+            return {
+                ...prevState,
+                userToken: action.token,
+                isSignout: false,
+                user: action.user
+            }
+
+        case 'SIGN_OUT':
+            return {
+                ...prevState,
+                isSignout: true,
+                userToken: null,
+                user: null,
+            }
+    }
+}
+
 const Routes = () => {
     const [state, dispatch] = useReducer(
-        (prevState, action) => {
-            switch (action.type) {
-                case 'RESTORE_TOKEN':
-                    return {
-                        ...prevState,
-                        userToken: action.token,
-                        isLoading: false
-
-                    }
-                case 'SIGN_IN':
-                    return {
-                        ...prevState,
-                        userToken: action.token,
-                        isSignout: false,
-                        user: action.user
-                    }
-
-                case 'SIGN_OUT':
-                    return {
-                        ...prevState,
-                        isSignout: true,
-                        userToken: null,
-                        user: null,
-                    }
-            }
-        },
+        reducer,
         {
             isLoading: true,
             isSignout: false,
@@ -107,13 +110,14 @@ const Routes = () => {
                 } else {
                     let endpoint
                     if (isMitra) {
-                        endpoint = `http://192.168.0.34:80/Laravel/shoeApp/public/api/partner/login`
+                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/login`
                     } else {
-                        endpoint = `http://192.168.0.34:80/Laravel/shoeApp/public/api/login`
+                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/login`
                     }
 
 
                     let response = await axios.post(endpoint, data)
+                    // console.log(response)
                     const { token, user } = response.data
                     console.log(endpoint, response.data)
                     // const token = 'dummy-token'
@@ -130,16 +134,16 @@ const Routes = () => {
                 // let rensponse = await axios.post(endpoint, data)
 
                 dispatch({ type: 'SIGN_IN', token: 'dummy-token' })
-            }
+            },
         }),
         []
     )
 
     return (
         <NavigationContainer>
-            <AuthContext.Provider value={authContext}  >
+            <AuthContext.Provider value={[state, authContext]}  >
                 {
-                    state.userToken == null ? (
+                    state.userToken == null && state.user == null ? (
                         <Stack.Navigator initialRouteName="login" screenOptions={{ headerShown: false }} >
                             <Stack.Screen name="login" component={Login} />
                             <Stack.Screen name="register" component={Register} />
@@ -151,6 +155,7 @@ const Routes = () => {
                                 <Stack.Screen name="order" component={Order} options={{ headerShown: true, title: '' }} />
                                 <Stack.Screen name="history" component={History} options={{ headerShown: true, title: 'History' }} />
                                 <Stack.Screen name="map" component={Map} />
+                                <Stack.Screen name="shop" component={Shop} />
                             </Stack.Navigator>
                         )
                 }

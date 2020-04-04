@@ -7,5 +7,6 @@ import Map from './Map'
 import User from './User'
 import History from './History'
 import SplashScreen from './SplashScreen'
+import Shop from './Shop'
 
-export { Login, Register, HomeTab, HistoryTab, Order, Map, User, History, SplashScreen }
+export { Login, Register, HomeTab, HistoryTab, Order, Map, User, History, SplashScreen, Shop }

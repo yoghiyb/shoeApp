@@ -6,7 +6,7 @@ var { width, height } = Dimensions.get('window')
 const SplashScreen = ({ navigation }) => {
 
     useEffect(() => {
-        console.log('didmount')
+        // console.log('didmount')
         navigation.navigate('login')
     }, [])
     return (
