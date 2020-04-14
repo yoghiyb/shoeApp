@@ -13,8 +13,8 @@ var data = [
 
 const Item = ({ name, total, date, address, onPress }) => {
     return (
-        <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={onPress} >
-            <View style={{ position: "relative", borderBottomWidth: 2, borderColor: 'gray', padding: 5, flexDirection: "row" }} >
+        <TouchableOpacity style={{}} onPress={onPress} >
+            <View style={{ position: "relative", borderBottomWidth: 0.5, borderColor: 'gray', padding: 5, flexDirection: "row", marginBottom: 1, backgroundColor: 'white' }} >
                 {/* <View style={{ backgroundColor: 'dodgerblue', height: 100, width: 100, borderRadius: 5 }} elevation={10} /> */}
                 <Image source={require('../assets/images/sepatu_vans.png')} style={{ height: 100, width: 100, resizeMode: "contain", borderRadius: 5 }} />
 
@@ -38,7 +38,9 @@ const Item = ({ name, total, date, address, onPress }) => {
 const HistoryTab = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }} >
-            <Text style={{ fontSize: 16, fontWeight: "bold", paddingHorizontal: 10, }} >Daftar Riwayat</Text>
+            <View style={{ backgroundColor: 'white' }} >
+                <Text style={{ fontSize: 20, fontWeight: "bold", paddingHorizontal: 10, paddingVertical: 10 }} >Daftar Riwayat</Text>
+            </View>
             <FlatList
                 data={data}
                 renderItem={

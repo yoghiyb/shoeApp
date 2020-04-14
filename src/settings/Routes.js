@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useReducer, useEffect, useMemo, createContext } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop } from '../components';
+import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop, CreateService, ShopSettings, ShopView } from '../components';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
@@ -44,6 +44,36 @@ const Home = () => {
         </Tab.Navigator>
     )
 }
+
+const HomeMitra = () => {
+    return (
+        <Tab.Navigator
+            tabBarOptions={{
+                activeTintColor: 'dodgerblue',
+                inactiveTintColor: 'gray',
+            }}
+            screenOptions={
+                ({ route }) => ({
+                    tabBarIcon: ({ color, size }) => {
+                        let iconName
+                        if (route.name == 'historyTab') {
+                            iconName = 'history'
+                        } else if (route.name == 'userTab') {
+                            iconName = 'user-cog'
+                        }
+
+                        return <Icon name={iconName} color={color} size={size} />
+                    }
+                })
+            }
+            keyboardHidesTabBar={true}
+        >
+            {/* <Tab.Screen name="homeTab" component={HomeTab} options={{ tabBarLabel: 'Home' }} /> */}
+            <Tab.Screen name="historyTab" component={HistoryTab} options={{ tabBarLabel: 'History' }} />
+            <Tab.Screen name="userTab" component={User} options={{ tabBarLabel: 'User' }} />
+        </Tab.Navigator>
+    )
+}
 export const AuthContext = createContext();
 
 export const reducer = (prevState, action) => {
@@ -60,13 +90,15 @@ export const reducer = (prevState, action) => {
                 ...prevState,
                 userToken: action.token,
                 isSignout: false,
-                user: action.user
+                user: action.user,
+                isMitra: action.isMitra
             }
 
         case 'SIGN_OUT':
             return {
                 ...prevState,
                 isSignout: true,
+                isMitra: false,
                 userToken: null,
                 user: null,
             }
@@ -80,7 +112,8 @@ const Routes = () => {
             isLoading: true,
             isSignout: false,
             userToken: null,
-            user: null
+            user: null,
+            isMitra: false
         }
     )
 
@@ -110,19 +143,16 @@ const Routes = () => {
                 } else {
                     let endpoint
                     if (isMitra) {
-                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/login`
+                        endpoint = `http://192.168.0.7:80/Laravel/shoeApp/public/api/partners/login`
                     } else {
-                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/login`
+                        endpoint = `http://192.168.0.7:80/Laravel/shoeApp/public/api/login`
                     }
 
-
                     let response = await axios.post(endpoint, data)
-                    // console.log(response)
+                    console.log(response.data)
                     const { token, user } = response.data
-                    console.log(endpoint, response.data)
-                    // const token = 'dummy-token'
                     await AsyncStorage.setItem('userToken', JSON.stringify(token))
-                    dispatch({ type: 'SIGN_IN', token, user })
+                    dispatch({ type: 'SIGN_IN', token, user, isMitra })
                 }
             },
             signOut: async () => {
@@ -151,12 +181,20 @@ const Routes = () => {
                         </Stack.Navigator>
                     ) : (
                             <Stack.Navigator screenOptions={{ headerShown: false }} >
-                                <Stack.Screen name="home" component={Home} />
+                                {state.isMitra == true ?
+                                    <Stack.Screen name="home" component={HomeMitra} />
+                                    :
+                                    <Stack.Screen name="home" component={Home} />
+                                }
                                 <Stack.Screen name="order" component={Order} options={{ headerShown: true, title: '' }} />
                                 <Stack.Screen name="history" component={History} options={{ headerShown: true, title: 'History' }} />
                                 <Stack.Screen name="map" component={Map} />
                                 <Stack.Screen name="shop" component={Shop} />
+                                <Stack.Screen name="createService" component={CreateService} />
+                                <Stack.Screen name="shopSettings" component={ShopSettings} />
+                                <Stack.Screen name="shopView" component={ShopView} />
                             </Stack.Navigator>
+
                         )
                 }
             </AuthContext.Provider>

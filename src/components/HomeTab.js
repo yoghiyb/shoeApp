@@ -17,7 +17,7 @@ var data = [
 const Item = ({ name, description, workTime, address, onPress }) => {
     return (
         <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={onPress} >
-            <View style={{ position: "relative", borderBottomWidth: 2, borderColor: 'gray', padding: 5, flexDirection: "row" }} >
+            <View style={{ position: "relative", borderBottomWidth: 0.5, borderColor: 'gray', padding: 5, flexDirection: "row", marginTop: 0.5 }} >
                 {/* <View style={{ backgroundColor: 'dodgerblue', height: 100, width: 100, borderRadius: 5 }} elevation={10} /> */}
                 <Image source={require('../assets/images/sepatu_vans.png')} style={{ height: 100, width: 100, resizeMode: "contain", borderRadius: 5 }} />
 
@@ -85,7 +85,8 @@ const HomeTab = ({ navigation }) => {
                             description={item.description}
                             workTime={item.workTime}
                             address={item.address}
-                            onPress={() => navigation.navigate('order', { item: item })} />
+                            onPress={() => navigation.navigate('shopView')} />
+                        // onPress={() => navigation.navigate('order', { item: item })} />
                     }
                     keyExtractor={item => item.id}
                 />

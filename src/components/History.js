@@ -15,13 +15,14 @@ const History = () => {
                 paddingVertical: 10,
                 width: width - 10,
                 alignItems: 'center',
-                borderBottomWidth: 1,
-                borderBottomColor: 'gray'
+                borderBottomWidth: 0.5,
+                borderBottomColor: 'gray',
+                backgroundColor: 'white'
             }} >
                 <View style={{
                     backgroundColor: 'blue',
-                    height: 20,
-                    width: 20,
+                    height: 10,
+                    width: 10,
                     borderRadius: 25,
                     marginHorizontal: 20
                 }} ></View>
