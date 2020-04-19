@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useReducer, useEffect, useMemo, createContext } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop, CreateService, ShopSettings, ShopView } from '../components';
+import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop, CreateService, ShopSettings, ShopView, ImagePickers } from '../components';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
@@ -143,9 +143,9 @@ const Routes = () => {
                 } else {
                     let endpoint
                     if (isMitra) {
-                        endpoint = `http://192.168.0.7:80/Laravel/shoeApp/public/api/partners/login`
+                        endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partners/login`
                     } else {
-                        endpoint = `http://192.168.0.7:80/Laravel/shoeApp/public/api/login`
+                        endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/login`
                     }
 
                     let response = await axios.post(endpoint, data)
@@ -193,6 +193,7 @@ const Routes = () => {
                                 <Stack.Screen name="createService" component={CreateService} />
                                 <Stack.Screen name="shopSettings" component={ShopSettings} />
                                 <Stack.Screen name="shopView" component={ShopView} />
+                                <Stack.Screen name="imagePicker" component={ImagePickers} options={{ headerShown: true, title: '' }} />
                             </Stack.Navigator>
 
                         )

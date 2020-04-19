@@ -46,7 +46,7 @@ const HomeTab = ({ navigation }) => {
     console.log(state)
 
     const getPartner = async () => {
-        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partners`
+        let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partners`
         let headers = {
             'Authorization': `Bearer ${state.userToken}`
         }
