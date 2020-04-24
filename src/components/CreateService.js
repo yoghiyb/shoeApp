@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react'
-import { View, Image, Text, TextInput, Dimensions, Picker, TouchableOpacity, Alert } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { View, Image, Text, TextInput, Dimensions, Picker, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
 import { AuthContext } from '../settings/Routes'
+import { useNavigationState, CommonActions, StackActions } from '@react-navigation/native';
 import axios from 'axios'
 
 var { width, height } = Dimensions.get("window")
@@ -13,14 +14,31 @@ const serviceItem = [
     { id: 3, service: 'Jahit Sepatu' },
 ]
 
-const CreateService = ({ navigation, isEdit = false }) => {
+const CreateService = ({ navigation, route }) => {
+    const { isEdit, item } = route.params
     const [state] = useContext(AuthContext)
     const [service, setService] = useState(null)
     const [unit, setUnit] = useState(null)
     const [price, setPrice] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    // const navState = useNavigationState(state => state);
+
+    // console.log(navState)
 
     let headers = {
         'Authorization': `Bearer ${state.userToken}`
+    }
+
+    if (isEdit) {
+        // console.log('EDIT MODE', item)
+        useEffect(() => {
+            setLoading(true)
+            setService(item?.service)
+            setUnit(item?.unit)
+            setPrice(item?.price)
+            setLoading(false)
+        }, [])
     }
 
     const newService = async () => {
@@ -37,28 +55,33 @@ const CreateService = ({ navigation, isEdit = false }) => {
             } else {
                 Alert.alert('', 'Semua form tidak boleh kosong!')
             }
-            console.log(body)
+            // console.log(body)
         } else {
-            let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/service`
-            let response = await axios.post(endpoint, body, { headers })
+            let endpoint
+            let response
 
-            if (response.data.status == 'Token is Expired') {
+            if (isEdit) {
+                endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/service/${item.id}`
+                response = await axios.put(endpoint, body, { headers })
+            }
+
+            if (!isEdit) {
+                endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/service`
+                response = await axios.post(endpoint, body, { headers })
+            }
+
+            if (response?.data.status == 'Token is Expired') {
                 Alert.alert('', 'Sesi anda telah berakhir, silahkan login kembali.')
             }
-            if (response.data == 'berhasil membuat jasa') {
+
+            if (response?.data == 'berhasil membuat jasa' || response?.data == 'berhasil update jasa') {
                 Alert.alert('', response.data, [
-                    { text: 'Ok', onPress: () => navigation.navigate('shop') }
+                    {
+                        text: 'Ok', onPress: () => navigation.goBack()
+                    }
                 ])
             }
         }
-    }
-
-    const updateService = () => {
-
-    }
-
-    if (isEdit) {
-        console.log('EDIT MODE')
     }
 
     return (
@@ -68,61 +91,71 @@ const CreateService = ({ navigation, isEdit = false }) => {
             alignItems: "center"
         }} >
             <Text style={{ fontSize: 20, marginBottom: 20 }} >Form Buat Jasa</Text>
-            <View style={{ width: WIDTH_CONTENT, marginBottom: 30 }} >
-                <Text
-                    style={{ fontSize: 20 }}
-                >Jasa</Text>
-                <Picker
-                    selectedValue={service}
-                    style={{
-                        width: WIDTH_CONTENT,
-                    }}
-                    onValueChange={(val, index) => {
-                        setService(val)
-                    }}
-                >
-                    {
-                        serviceItem.map((row, index) => (
-                            <Picker.Item key={index} label={row.service} value={row.service} />
-                        ))
-                    }
-                </Picker>
-                <Text style={{ fontSize: 20 }} >Unit</Text>
-                <TextInput
-                    style={{
-                        width: WIDTH_CONTENT,
-                        fontSize: 16,
-                        borderBottomColor: 'gray',
-                        borderBottomWidth: 1
-                    }}
-                    onChangeText={text => setUnit(text)}
-                    placeholder="(pasang)"
-                />
-                <Text style={{ fontSize: 20 }} >Harga</Text>
-                <TextInput
-                    style={{
-                        width: WIDTH_CONTENT,
-                        fontSize: 16,
-                        borderBottomColor: 'gray',
-                        borderBottomWidth: 1
-                    }}
-                    onChangeText={text => setPrice(text)}
-                    placeholder="Masukkan harga disini"
-                />
-            </View>
-            <TouchableOpacity onPress={newService} >
-                <View style={{
-                    backgroundColor: '#D9F2FA',
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    borderRadius: 5,
-                    elevation: 2
-                }} >
-                    <Text style={{
-                        fontSize: 24
-                    }} >Buat</Text>
-                </View>
-            </TouchableOpacity>
+            {
+                loading ?
+                    <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
+                    :
+                    <View style={{ width: WIDTH_CONTENT, marginBottom: 30 }} >
+                        <Text
+                            style={{ fontSize: 20 }}
+                        >Jasa</Text>
+                        <Picker
+                            selectedValue={service}
+                            style={{
+                                width: WIDTH_CONTENT,
+                            }}
+                            onValueChange={(val, index) => {
+                                setService(val)
+                            }}
+                        >
+                            {
+                                serviceItem.map((row, index) => (
+                                    <Picker.Item key={index} label={row.service} value={row.service} />
+                                ))
+                            }
+                        </Picker>
+                        <Text style={{ fontSize: 20 }} >Unit</Text>
+                        <TextInput
+                            style={{
+                                width: WIDTH_CONTENT,
+                                fontSize: 16,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 1
+                            }}
+                            onChangeText={text => setUnit(text)}
+                            value={isEdit && unit}
+                            placeholder="(pasang)"
+                        />
+                        <Text style={{ fontSize: 20 }} >Harga</Text>
+                        <TextInput
+                            style={{
+                                width: WIDTH_CONTENT,
+                                fontSize: 16,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 1
+                            }}
+                            onChangeText={text => setPrice(text)}
+                            value={isEdit && price?.toString()}
+                            placeholder="Masukkan harga disini"
+                        />
+                    </View>
+            }
+            {
+                !loading &&
+                <TouchableOpacity onPress={newService} >
+                    <View style={{
+                        backgroundColor: isEdit ? 'lightgreen' : '#D9F2FA',
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
+                        borderRadius: 5,
+                        elevation: 2
+                    }} >
+                        <Text style={{
+                            fontSize: 24
+                        }} >{isEdit ? 'Simpan' : 'Buat'}</Text>
+                    </View>
+                </TouchableOpacity>
+            }
         </View>
     )
 }

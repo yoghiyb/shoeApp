@@ -106,6 +106,7 @@ export const reducer = (prevState, action) => {
 }
 
 const Routes = () => {
+    const baseUrl = `http://192.168.0.76:80/Laravel/shoeApp/public/api`
     const [state, dispatch] = useReducer(
         reducer,
         {
@@ -143,13 +144,13 @@ const Routes = () => {
                 } else {
                     let endpoint
                     if (isMitra) {
-                        endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partners/login`
+                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partners/login`
                     } else {
-                        endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/login`
+                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/login`
                     }
 
                     let response = await axios.post(endpoint, data)
-                    console.log(response.data)
+                    console.log('cek respon dari route', response.data)
                     const { token, user } = response.data
                     await AsyncStorage.setItem('userToken', JSON.stringify(token))
                     dispatch({ type: 'SIGN_IN', token, user, isMitra })
@@ -171,7 +172,7 @@ const Routes = () => {
 
     return (
         <NavigationContainer>
-            <AuthContext.Provider value={[state, authContext]}  >
+            <AuthContext.Provider value={[state, authContext, baseUrl]}  >
                 {
                     state.userToken == null && state.user == null ? (
                         <Stack.Navigator initialRouteName="login" screenOptions={{ headerShown: false }} >
@@ -188,7 +189,7 @@ const Routes = () => {
                                 }
                                 <Stack.Screen name="order" component={Order} options={{ headerShown: true, title: '' }} />
                                 <Stack.Screen name="history" component={History} options={{ headerShown: true, title: 'History' }} />
-                                <Stack.Screen name="map" component={Map} />
+                                <Stack.Screen name="map" component={Map} options={{ headerShown: true, title: 'Map' }} />
                                 <Stack.Screen name="shop" component={Shop} />
                                 <Stack.Screen name="createService" component={CreateService} />
                                 <Stack.Screen name="shopSettings" component={ShopSettings} />

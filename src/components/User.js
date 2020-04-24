@@ -36,7 +36,7 @@ const User = ({ navigation }) => {
             </View>
             {state.isMitra &&
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('shop')}
+                    onPress={() => navigation.navigate('shop', { reRender: false })}
                     style={{
                         width: width,
                         height: 50,

@@ -40,13 +40,15 @@ const Item = ({ name, description, workTime, address, onPress }) => {
 
 const HomeTab = ({ navigation }) => {
 
-    const [state, { status }] = useContext(AuthContext)
+    const [state, { signOut }, baseUrl] = useContext(AuthContext)
     const [partner, setPartner] = useState(null)
 
-    console.log(state)
+    // console.log('test', signOut, baseUrl)
+
+    if (state.user == null) signOut()
 
     const getPartner = async () => {
-        let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partners`
+        let endpoint = `${baseUrl}/partners`
         let headers = {
             'Authorization': `Bearer ${state.userToken}`
         }

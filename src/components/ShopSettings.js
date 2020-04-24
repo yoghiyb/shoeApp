@@ -27,7 +27,7 @@ const ShopSettings = ({ navigation }) => {
     }
 
     const getUserStrore = async () => {
-        let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
+        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
         let response = await axios.get(endpoint, { headers })
 
         let { partner } = response.data
@@ -68,7 +68,7 @@ const ShopSettings = ({ navigation }) => {
             model.address.trim()
             model.phone_number.trim()
 
-            let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partner/shop/${state.user.id}`
+            let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/shop/${state.user.id}`
             let response = await axios.patch(endpoint, model, { headers })
 
             if (response.status == 200) {

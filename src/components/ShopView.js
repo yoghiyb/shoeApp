@@ -16,7 +16,7 @@ const ShopView = ({ navigation }) => {
     const loadData = async () => {
         let endpoint
         if (state.isMitra) {
-            endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
+            endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
         } else {
             endpoint = ``
         }

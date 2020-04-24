@@ -8,7 +8,7 @@ import axios from 'axios'
 var { height, width } = Dimensions.get("window")
 
 const ImagePickers = ({ navigation }) => {
-    const [state] = useContext(AuthContext)
+    const [state, auth, baseUrl] = useContext(AuthContext)
     const [image, setImage] = useState(null)
     const [loading, setLoading] = useState(false)
 
@@ -23,19 +23,19 @@ const ImagePickers = ({ navigation }) => {
     }, [])
 
     const getImage = async () => {
-        let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partner/image/${state.user.id}`
+        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/image/${state.user.id}`
         let response = await axios.get(endpoint, { headers })
-        let imageUrl = `http://192.168.0.22:80/Laravel/shoeApp${response.data.imageUrl}`
+        let imageUrl = `http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`
         setImage(imageUrl)
     }
 
     const saveImg = async (body) => {
-        let endpoint = `http://192.168.0.22:80/Laravel/shoeApp/public/api/partner/image/${state.user.id}`
+        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/image/${state.user.id}`
         let response = await axios.put(endpoint, body, { headers })
 
-        let imageUrl = `http://192.168.0.22:80/Laravel/shoeApp${response.data.imageUrl}`
+        let imageUrl = `http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`
 
-        console.log(`http://192.168.0.22:80/Laravel/shoeApp${response.data.imageUrl}`)
+        console.log(`http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`)
         setImage(imageUrl)
     }
 
