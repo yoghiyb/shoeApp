@@ -9,103 +9,106 @@ var { width, height } = Dimensions.get('window')
 
 const CONTENT_WIDTH = width - 50
 
-const ShopView = ({ navigation }) => {
+const ShopView = ({ navigation, route }) => {
     const [state] = useContext(AuthContext);
     const [shop, setShop] = useState(null)
+    const { partner_id } = route.params
+
+    let headers = {
+        'Authorization': `Bearer ${state.userToken}`
+    }
 
     const loadData = async () => {
         let endpoint
         if (state.isMitra) {
             endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
         } else {
-            endpoint = ``
-        }
-
-        let headers = {
-            'Authorization': `Bearer ${state.userToken}`
+            endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${partner_id}`
         }
 
         let response = await axios.get(endpoint, { headers })
         setShop(response.data.partner)
-        // console.log(shop)
+        // console.log('cek response shopView : ', response.data)
     }
 
     useEffect(() => {
         loadData()
     }, [])
 
-    console.log(shop)
+    console.log('cek shop : ', shop)
     return (
         <View style={{ flex: 1 }} >
             <ScrollView >
-                <View style={{
-                    width: width,
-                    height: height / 3,
-                    position: 'relative',
-                }} >
-                    <Image style={{
-                        // backgroundColor: 'gray',
-                        width: width,
-                        height: height / 3,
-                    }}
-                        source={require('../assets/images/sepatu_vans.png')}
-                    />
-                    <View style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 10,
-                        alignSelf: 'center',
-                    }} >
-                    </View>
-                </View>
                 {shop == null ?
                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                     :
-                    <View style={{
-                        backgroundColor: 'white',
-                        // height: 100,
-                        width: width,
-                        paddingHorizontal: 15,
-                        paddingVertical: 10
-                    }} >
-                        <Text style={{
-                            fontSize: 18
-                        }} >{shop.store_name ? shop.store_name : null}</Text>
-                        <View style={{ flexDirection: "row" }} >
-                            <View style={{ flex: 1 }} >
-                                {shop.start_working_days &&
-                                    <Text style={{ color: 'gray' }} >{shop.start_working_days + ' - ' + shop.end_working_days}</Text>
-                                }
-                                {
-                                    shop.start_working_time &&
-                                    <View style={{ flexDirection: "row", alignItems: "center" }} >
-                                        <Icon name="clock" size={16} color={'gray'} />
-                                        <Text style={{ marginLeft: 5, color: 'gray' }}>{shop.start_working_time + ' - ' + shop.end_working_time}</Text>
-                                    </View>
-                                }
+                    <View>
+                        <View style={{
+                            width: width,
+                            height: height / 3,
+                            position: 'relative',
+                        }} >
+                            <Image style={{
+                                backgroundColor: shop.imgPath ? null : 'gray',
+                                width: width,
+                                height: height / 3,
+                            }}
+                                source={shop.imgPath ? { uri: `http://192.168.0.76:80/Laravel/shoeApp${shop.imgPath}` } : null}
+                            />
+                            <View style={{
+                                position: 'absolute',
+                                top: 10,
+                                right: 10,
+                                alignSelf: 'center',
+                            }} >
                             </View>
-                            <View style={{ flex: 1 }} >
-                                {
-                                    shop.phone_number &&
-                                    <View style={{ flexDirection: "row", alignItems: "center" }} >
-                                        <Icon name="phone" size={14} color={'gray'} />
-                                        <Text style={{ color: 'gray', marginLeft: 5 }}>{shop.phone_number}</Text>
-                                    </View>
-                                }
-                                {
-                                    shop.location ?
-                                        <TouchableOpacity onPress={() => { navigation.navigate('map', { location: shop.location }) }} >
-                                            <View style={{ flexDirection: "row", alignItems: "center" }} >
-                                                <Icon name="map-marked-alt" size={16} color={'blue'} />
-                                                <Text style={{ color: 'blue', marginLeft: 5 }}>Lokasi</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                        :
+                        </View>
+                        <View style={{
+                            backgroundColor: 'white',
+                            // height: 100,
+                            width: width,
+                            paddingHorizontal: 15,
+                            paddingVertical: 10
+                        }} >
+                            <Text style={{
+                                fontSize: 18
+                            }} >{shop.store_name ? shop.store_name : null}</Text>
+                            <View style={{ flexDirection: "row" }} >
+                                <View style={{ flex: 1 }} >
+                                    {shop.start_working_days &&
+                                        <Text style={{ color: 'gray' }} >{shop.start_working_days + ' - ' + shop.end_working_days}</Text>
+                                    }
+                                    {
+                                        shop.start_working_time &&
                                         <View style={{ flexDirection: "row", alignItems: "center" }} >
-                                            <Icon name="map-marked-alt" size={16} color={'gray'} />
-                                            <Text style={{ color: 'gray', marginLeft: 5 }}>Lokasi</Text>
+                                            <Icon name="clock" size={16} color={'gray'} />
+                                            <Text style={{ marginLeft: 5, color: 'gray' }}>{shop.start_working_time + ' - ' + shop.end_working_time}</Text>
                                         </View>
-                                }
+                                    }
+                                </View>
+                                <View style={{ flex: 1 }} >
+                                    {
+                                        shop.phone_number &&
+                                        <View style={{ flexDirection: "row", alignItems: "center" }} >
+                                            <Icon name="phone" size={14} color={'gray'} />
+                                            <Text style={{ color: 'gray', marginLeft: 5 }}>{shop.phone_number}</Text>
+                                        </View>
+                                    }
+                                    {
+                                        shop.location ?
+                                            <TouchableOpacity onPress={() => { navigation.navigate('map', { location: shop.location }) }} >
+                                                <View style={{ flexDirection: "row", alignItems: "center" }} >
+                                                    <Icon name="map-marked-alt" size={16} color={'blue'} />
+                                                    <Text style={{ color: 'blue', marginLeft: 5 }}>Lokasi</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                            :
+                                            <View style={{ flexDirection: "row", alignItems: "center" }} >
+                                                <Icon name="map-marked-alt" size={16} color={'gray'} />
+                                                <Text style={{ color: 'gray', marginLeft: 5 }}>Lokasi</Text>
+                                            </View>
+                                    }
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -135,7 +138,15 @@ const ShopView = ({ navigation }) => {
                             </View>
                             :
                             shop.service.map((row, index) => (
-                                <TouchableOpacity key={index} >
+                                <TouchableOpacity key={index}
+                                    onPress={() => {
+                                        if (state.isMitra) {
+                                            null
+                                        } else {
+                                            navigation.navigate('order', { 'item': row })
+                                        }
+                                    }}
+                                >
                                     <View style={{
                                         backgroundColor: 'white',
                                         width: width,

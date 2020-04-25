@@ -102,7 +102,7 @@ const Shop = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('shopView')} >
+            <TouchableOpacity onPress={() => navigation.navigate('shopView', { 'partner_id': null })} >
                 <View style={{
                     backgroundColor: 'white',
                     height: 50,

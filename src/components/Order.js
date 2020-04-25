@@ -9,14 +9,19 @@ const Order = ({ navigation, route }) => {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [desc, setDesc] = useState('')
-    const [total, setTotal] = useState(20000)
+    const [price, setPrice] = useState(0)
+    const [total, setTotal] = useState(0)
 
     const { item } = route.params
 
     useEffect(() => {
-        let total = count * 20000
-        setTotal(total)
-    }, [count])
+        setPrice(item.price)
+        setTotal(item.price)
+    }, [])
+
+    // useEffect(() => {
+    //     setTotal(current => current * price)
+    // }, [count])
 
     const sendOrder = () => {
         let model = { name, address, desc, amount: count }
@@ -28,20 +33,7 @@ const Order = ({ navigation, route }) => {
         }
     }
 
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <View style={{ flexDirection: "row" }}  >
-                    <TouchableOpacity style={{ marginRight: 10 }} onPress={() => navigation.navigate('home')} >
-                        <Icon name="info-circle" size={26} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ marginRight: 10 }} onPress={() => navigation.navigate('map', { location: item.location })} >
-                        <Icon name="map-marked-alt" size={26} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
-    })
+    console.log(item)
 
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
@@ -76,7 +68,7 @@ const Order = ({ navigation, route }) => {
                     </View>
                 </TouchableOpacity>
             </View>
-            <Text style={{ fontSize: 12, marginLeft: 5 }} >Pasang</Text>
+            <Text style={{ fontSize: 12, marginLeft: 5 }} >{item.unit}</Text>
             <View style={{ flexDirection: "row" }} >
                 <Text style={{ fontSize: 16, fontWeight: "bold" }} >Total : </Text>
                 <Text>Rp. {total}</Text>

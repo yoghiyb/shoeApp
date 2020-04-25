@@ -35,7 +35,7 @@ const Map = ({ navigation, route }) => {
 
         // console.log(response)
         if (response.data != 'gagal') {
-            console.log(response.data)
+            // console.log(response.data)
             setCurrentCoordinate({ latitude: response.data.latitude, longitude: response.data.longitude })
             // setNewCoordinate({ latitude: response.data.latitude, longitude: response.data.longitude })
         }
@@ -62,11 +62,9 @@ const Map = ({ navigation, route }) => {
             checkCoordinate()
             Alert.alert('', `${response.data.sukses}`)
         }
-
-        // Alert.alert('', '')
     }
 
-    console.log(newCoordinate, isEdit)
+    // console.log(newCoordinate, isEdit)
     return (
         <View style={{ flex: 1, position: 'relative' }} >
             <MapView
@@ -93,7 +91,7 @@ const Map = ({ navigation, route }) => {
                             title={'Lokasi Toko anda'}
                             draggable
                             onDragEnd={(c) => {
-                                console.log(c.nativeEvent.coordinate)
+                                // console.log(c.nativeEvent.coordinate)
                                 setNewCoordinate(c.nativeEvent.coordinate)
                             }}
                         >
@@ -110,7 +108,7 @@ const Map = ({ navigation, route }) => {
                 }
             </MapView>
             {
-                newCoordinate ??
+                newCoordinate &&
                 <TouchableOpacity style={{
                     position: 'absolute',
                     height: 40,

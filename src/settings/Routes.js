@@ -137,7 +137,7 @@ const Routes = () => {
     const authContext = useMemo(
         () => ({
             signIn: async data => {
-                console.log(data)
+                // console.log(data)
                 const { email, password, isMitra } = data
                 if (email == '' || password == '') {
                     Alert.alert('Username dan Password tidak boleh kosong!')
@@ -150,7 +150,7 @@ const Routes = () => {
                     }
 
                     let response = await axios.post(endpoint, data)
-                    console.log('cek respon dari route', response.data)
+                    // console.log('cek respon dari route', response.data)
                     const { token, user } = response.data
                     await AsyncStorage.setItem('userToken', JSON.stringify(token))
                     dispatch({ type: 'SIGN_IN', token, user, isMitra })
