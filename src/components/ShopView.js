@@ -143,7 +143,7 @@ const ShopView = ({ navigation, route }) => {
                                         if (state.isMitra) {
                                             null
                                         } else {
-                                            navigation.navigate('order', { 'item': row })
+                                            navigation.navigate('order', { 'item': row, 'store_name': shop.store_name })
                                         }
                                     }}
                                 >

@@ -118,7 +118,6 @@ const HomeTab = ({ navigation }) => {
                             data={partner}
                             renderItem={
                                 ({ item }) => <Item
-                                    key={item.id}
                                     store_name={item.store_name}
                                     start_working_days={item.start_working_days}
                                     end_working_days={item.end_working_days}
