@@ -12,7 +12,7 @@
     npx react-native run-android
 ```
 
-![alt text](https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss1.png "ss1")|![alt text](https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss2.png "ss2")|![alt text](https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss3.png "ss3")
-![alt text](https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss4.png "ss4")|![alt text](https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss1.png "ss1")|![alt text](https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss1.png "ss1")
+<img src="https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss1.png" width="250">|<img src="https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss2.png" width="250">|<img src="https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss3.png" width="250">
+<img src="https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss4.png" width="250">|<img src="https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss5.png" width="250">|<img src="https://github.com/yoghiyb/shoeApp/blob/master/screenshoot/ss6.png" width="250">
 
 
