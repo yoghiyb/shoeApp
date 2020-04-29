@@ -56,11 +56,11 @@ const Order = ({ navigation, route }) => {
         if (name == '' || address == '' || desc == '' || count == '' || phone == null || phone == '') {
             Alert.alert('Harap isi semua form pemesanan')
         } else {
-            console.log(body)
+            // console.log(body)
             let endpoint = `${baseUrl}/order`
             let response = await axios.post(endpoint, body, { headers })
 
-            console.log(response)
+            // console.log(response)
             if (response.data?.status == "Token is Expired") {
                 Alert.alert('', 'Sesi anda telah berakhir silahkan login kembali', [
                     { text: 'Login', onPress: () => signOut() }

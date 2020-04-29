@@ -7,12 +7,39 @@ var { width, height } = Dimensions.get('window')
 
 const WIDTH_CONTENT = width - 50
 
-const Hours = ['', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00']
+const Hours = [
+    '',
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+    '24:00'
+]
 
 const Days = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
 const ShopSettings = ({ navigation }) => {
-    const [state, { signOut }] = useContext(AuthContext);
+    const [state, { signOut }, baseUrl] = useContext(AuthContext);
     const [storeName, setStoreName] = useState('')
     const [storeAddress, setStoreAddress] = useState('')
     const [startWorkingHour, setStartWorkingHour] = useState(null)
@@ -27,7 +54,7 @@ const ShopSettings = ({ navigation }) => {
     }
 
     const getUserStrore = async () => {
-        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
+        let endpoint = `${baseUrl}/partner/${state.user.id}`
         let response = await axios.get(endpoint, { headers })
 
         let { partner } = response.data
@@ -40,8 +67,7 @@ const ShopSettings = ({ navigation }) => {
         if (partner.end_working_days) setEndWorkingDay(partner.end_working_days)
         if (partner.phone_number) setNoTlp(partner.phone_number)
 
-
-        console.log('cek respon didmout', partner)
+        // console.log('cek respon didmout', partner)
     }
 
     useEffect(() => {
@@ -68,7 +94,7 @@ const ShopSettings = ({ navigation }) => {
             model.address.trim()
             model.phone_number.trim()
 
-            let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/shop/${state.user.id}`
+            let endpoint = `${baseUrl}/partner/shop/${state.user.id}`
             let response = await axios.patch(endpoint, model, { headers })
 
             if (response.status == 200) {

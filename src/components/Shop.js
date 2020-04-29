@@ -22,7 +22,7 @@ const Shop = ({ navigation }) => {
         let response = await axios.get(endpoint, { headers })
 
         setService(response.data)
-        console.log('ambil data jasa')
+        // console.log('ambil data jasa')
     }
 
     const getImage = async () => {

@@ -12,5 +12,26 @@ import CreateService from './CreateService'
 import ShopSettings from "./ShopSettings"
 import ShopView from './ShopView'
 import ImagePickers from './ImagePicker'
+import OrderList from './OrderList'
+import OrderListDetail from './OrderListDetail'
+import OrderHistory from './OrderHistory'
 
-export { Login, Register, HomeTab, HistoryTab, Order, Map, User, History, SplashScreen, Shop, CreateService, ShopSettings, ShopView, ImagePickers }
+export {
+    Login,
+    Register,
+    HomeTab,
+    HistoryTab,
+    Order,
+    Map,
+    User,
+    History,
+    SplashScreen,
+    Shop,
+    CreateService,
+    ShopSettings,
+    ShopView,
+    ImagePickers,
+    OrderList,
+    OrderListDetail,
+    OrderHistory
+}

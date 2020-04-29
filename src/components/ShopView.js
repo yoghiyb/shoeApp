@@ -10,7 +10,7 @@ var { width, height } = Dimensions.get('window')
 const CONTENT_WIDTH = width - 50
 
 const ShopView = ({ navigation, route }) => {
-    const [state] = useContext(AuthContext);
+    const [state, auth, baseUrl] = useContext(AuthContext);
     const [shop, setShop] = useState(null)
     const { partner_id } = route.params
 
@@ -21,9 +21,9 @@ const ShopView = ({ navigation, route }) => {
     const loadData = async () => {
         let endpoint
         if (state.isMitra) {
-            endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${state.user.id}`
+            endpoint = `${baseUrl}/partner/${state.user.id}`
         } else {
-            endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/${partner_id}`
+            endpoint = `${baseUrl}/partner/${partner_id}`
         }
 
         let response = await axios.get(endpoint, { headers })
@@ -35,7 +35,7 @@ const ShopView = ({ navigation, route }) => {
         loadData()
     }, [])
 
-    console.log('cek shop : ', shop)
+    // console.log('cek shop : ', shop)
     return (
         <View style={{ flex: 1 }} >
             <ScrollView >

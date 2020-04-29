@@ -10,7 +10,7 @@ const IMAGE_PROFILE = 100
 
 const User = ({ navigation }) => {
     const [state, { signOut }] = useContext(AuthContext);
-    console.log(state)
+    // console.log(state)
     return (
         <View style={{ flex: 1 }} >
             <View style={{
@@ -29,10 +29,12 @@ const User = ({ navigation }) => {
                 <TouchableOpacity>
                     <Text style={{ color: 'blue' }} >Edit</Text>
                 </TouchableOpacity>
-                <Text style={{
-                    color: 'gray',
-                    marginTop: 20
-                }} >yoghiyb@gmail.com</Text>
+                {state?.user?.email &&
+                    <Text style={{
+                        color: 'gray',
+                        marginTop: 20
+                    }} >{state.user.email}</Text>
+                }
             </View>
             {state.isMitra &&
                 <TouchableOpacity
@@ -48,7 +50,7 @@ const User = ({ navigation }) => {
                         alignItems: 'center'
                     }} >
                     <Entypo name="shop" size={30} color={"dodgerblue"} />
-                    <Text style={{ marginLeft: 10 }} >Setting Your Shop</Text>
+                    <Text style={{ marginLeft: 10 }} >Pengaturan Toko</Text>
                 </TouchableOpacity>
             }
             <TouchableOpacity

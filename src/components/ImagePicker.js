@@ -23,19 +23,19 @@ const ImagePickers = ({ navigation }) => {
     }, [])
 
     const getImage = async () => {
-        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/image/${state.user.id}`
+        let endpoint = `${baseUrl}/partner/image/${state.user.id}`
         let response = await axios.get(endpoint, { headers })
         let imageUrl = `http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`
         setImage(imageUrl)
     }
 
     const saveImg = async (body) => {
-        let endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partner/image/${state.user.id}`
+        let endpoint = `${baseUrl}/partner/image/${state.user.id}`
         let response = await axios.put(endpoint, body, { headers })
 
         let imageUrl = `http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`
 
-        console.log(`http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`)
+        // console.log(`http://192.168.0.76:80/Laravel/shoeApp${response.data.imageUrl}`)
         setImage(imageUrl)
     }
 
@@ -52,7 +52,7 @@ const ImagePickers = ({ navigation }) => {
         }
 
         ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
+            // console.log('Response = ', response);
 
             if (response.didCancel) {
                 console.log('User cancelled image picker');

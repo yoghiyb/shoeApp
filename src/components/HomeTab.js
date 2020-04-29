@@ -8,10 +8,10 @@ import axios from 'axios'
 var { width, height } = Dimensions.get("window")
 
 var data = [
-    { id: '1', name: "no 1", address: 'Sidoarjo', workTime: '08:00 - 16:00', description: 'Cuci/Service', location: { latitude: '-7.4478', longtitude: '112.7183' } },
-    { id: '2', name: "no 2", address: 'Sidoarjo', workTime: '08:00 - 16:00', description: 'Cuci/Service', location: { latitude: '-7.490720', longtitude: '112.710539' } },
-    { id: '3', name: "no 3", address: 'Sidoarjo', workTime: '08:00 - 16:00', description: 'Cuci/Service', location: { latitude: '-7.4478', longtitude: '112.7183' } },
-    { id: '4', name: "no 4", address: 'Sidoarjo', workTime: '08:00 - 16:00', description: 'Cuci/Service', location: { latitude: '-7.4478', longtitude: '112.7183' } },
+    { id: '1', image: require('../assets/images/shoe2.jpg') },
+    { id: '2', image: require('../assets/images/shoe3.jpg') },
+    { id: '3', image: require('../assets/images/shoe4.jpg') },
+    { id: '4', image: require('../assets/images/shoe5.jpg') },
 ]
 
 const Item = ({ store_name, start_working_days, end_working_days, start_working_time, end_working_time, imgPath, onPress }) => {
@@ -74,7 +74,7 @@ const HomeTab = ({ navigation }) => {
             endpoint = `${baseUrl}/partners`
             response = await axios.get(endpoint, { headers })
         }
-        console.log("cek response partner", response)
+        // console.log("cek response partner", response)
 
         let filteredPartner = response.data.filter(p => p.store_name != null)
         setPartner(filteredPartner)
@@ -103,9 +103,19 @@ const HomeTab = ({ navigation }) => {
                 >
                     {data.map((row, index) => (
                         <View key={index} style={{ width: width - 30, backgroundColor: 'dodgerblue', height: 200, borderRadius: 5, marginLeft: 10 }} >
-                            <Text>{row.name}</Text>
+                            {/* <Text>{row.name}</Text> */}
+                            <Image key={index} style={{
+                                flex: 1,
+                                height: null,
+                                width: null,
+                                // backgroundColor: 'gray',
+                                borderRadius: 5
+                            }}
+                                source={row.image}
+                            />
                         </View>
                     ))}
+                    <View style={{ marginRight: 10 }} />
                 </ScrollView>
             </View>
             <View style={{ flex: 1 }} >

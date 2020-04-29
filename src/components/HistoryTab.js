@@ -7,13 +7,6 @@ import axios from 'axios';
 
 var { height, width } = Dimensions.get('window');
 
-var data = [
-    { id: '1', name: "no 1", address: 'Sidoarjo', date: '16-Maret-2020', total: 20000 },
-    { id: '2', name: "no 2", address: 'Sidoarjo', date: '16-Maret-2020', total: 20000 },
-    { id: '3', name: "no 3", address: 'Sidoarjo', date: '16-Maret-2020', total: 20000 },
-    { id: '4', name: "no 4", address: 'Sidoarjo', date: '16-Maret-2020', total: 20000 },
-]
-
 const Item = ({ imgUrl, store_name, order_no, service, price, created_at, description, onPress }) => {
     return (
         <TouchableOpacity style={{}} onPress={onPress} >
@@ -69,7 +62,6 @@ const HistoryTab = ({ navigation }) => {
             Alert.alert('', 'Sesi anda telah berakhir silahkan login kembali', [
                 { text: 'Login', onPress: () => auth.signOut() }
             ])
-            return
         }
         setHistory(response.data)
     }
@@ -92,6 +84,8 @@ const HistoryTab = ({ navigation }) => {
         return description
     }
 
+    console.log(history)
+
     return (
         <View style={{ flex: 1 }} >
             <View style={{ backgroundColor: 'white' }} >
@@ -101,7 +95,7 @@ const HistoryTab = ({ navigation }) => {
                 loading ?
                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                     :
-                    history.length > 1 ?
+                    history.length > 0 ?
                         <FlatList
                             data={history}
                             renderItem={

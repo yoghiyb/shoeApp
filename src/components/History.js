@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, Image, Dimensions, FlatList } from 'react-native'
+import { View, Text, Image, Dimensions, FlatList, ActivityIndicator } from 'react-native'
 import { AuthContext } from '../settings/Routes'
 import axios from 'axios'
 
@@ -18,7 +18,7 @@ const History = ({ navigation, route }) => {
     const getOrderHistory = async () => {
         let endpoint = `${baseUrl}/order/${history.order_no}`
         let response = await axios.get(endpoint, { headers })
-        console.log(response.data)
+        // console.log(response)
         setOrderHistory(response.data)
     }
 
@@ -70,21 +70,28 @@ const History = ({ navigation, route }) => {
 
                 </View>
                 <View style={{
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
                 }} >
                     <Text style={{ color: 'gray' }} >Jasa: {history?.service?.service}</Text>
-                    <Text style={{ color: 'gray', marginLeft: 20 }} >Harga : {history?.service?.price}/{history?.service?.unit}</Text>
+                    <Text style={{ color: 'gray' }} >Harga : {history?.service?.price}/{history?.service?.unit}</Text>
                 </View>
                 <Text style={{ color: 'gray' }} >Jumlah yang dipesan: {history?.amount}</Text>
                 <Text style={{ color: 'gray' }} >Total Harga: {history?.price}</Text>
+                <Text style={{ color: 'gray' }} >Alamat : {history?.address}</Text>
             </View>
-            <FlatList
-                data={orderHistory}
-                keyExtractor={item => item.id}
-                renderItem={
-                    ({ item }) => <Item status={item.status} created_at={splitDate(item.created_at)} />
-                }
-            />
+            {
+                orderHistory == null ?
+                    <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
+                    :
+                    <FlatList
+                        data={orderHistory}
+                        keyExtractor={item => item.id}
+                        renderItem={
+                            ({ item }) => <Item status={item.status} created_at={splitDate(item.created_at)} />
+                        }
+                    />
+            }
         </View>
     )
 }

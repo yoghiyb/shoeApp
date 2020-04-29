@@ -6,20 +6,27 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useReducer, useEffect, useMemo, createContext } from 'react';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop, CreateService, ShopSettings, ShopView, ImagePickers } from '../components';
+import { HistoryTab, HomeTab, Login, Map, Order, Register, User, History, SplashScreen, Shop, CreateService, ShopSettings, ShopView, ImagePickers, OrderList, OrderListDetail, OrderHistory } from '../components';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
+// inisiasi navigasi
+// stack navigasi
 const Stack = createStackNavigator();
+// tab navigasi
 const Tab = createBottomTabNavigator();
 
+// component home untuk user
 const Home = () => {
     return (
+        // menggunakan Tab navigasi
         <Tab.Navigator
+            // Pengaturan warna Tab navigasi ketika aktif atau tidak
             tabBarOptions={{
                 activeTintColor: 'dodgerblue',
                 inactiveTintColor: 'gray',
             }}
+            // pengaturan tab icon
             screenOptions={
                 ({ route }) => ({
                     tabBarIcon: ({ color, size }) => {
@@ -36,27 +43,35 @@ const Home = () => {
                     }
                 })
             }
+            // keyboard melayang diatas Tab navigasi
             keyboardHidesTabBar={true}
         >
-            <Tab.Screen name="homeTab" component={HomeTab} options={{ tabBarLabel: 'Home' }} />
-            <Tab.Screen name="historyTab" component={HistoryTab} options={{ tabBarLabel: 'History' }} />
+            {/* isi dari Tab navigasi */}
+            <Tab.Screen name="homeTab" component={HomeTab} options={{ tabBarLabel: 'Beranda' }} />
+            <Tab.Screen name="historyTab" component={HistoryTab} options={{ tabBarLabel: 'Riwayat' }} />
             <Tab.Screen name="userTab" component={User} options={{ tabBarLabel: 'User' }} />
         </Tab.Navigator>
     )
 }
 
+// component home untuk partner
 const HomeMitra = () => {
     return (
+        // menggunakan Tab navigasi
         <Tab.Navigator
+            // Pengaturan warna Tab navigasi ketika aktif atau tidak
             tabBarOptions={{
                 activeTintColor: 'dodgerblue',
                 inactiveTintColor: 'gray',
             }}
+            // pengaturan tab icon
             screenOptions={
                 ({ route }) => ({
                     tabBarIcon: ({ color, size }) => {
                         let iconName
-                        if (route.name == 'historyTab') {
+                        if (route.name == 'orderList') {
+                            iconName = 'clipboard-list'
+                        } else if (route.name == 'orderHist') {
                             iconName = 'history'
                         } else if (route.name == 'userTab') {
                             iconName = 'user-cog'
@@ -66,10 +81,12 @@ const HomeMitra = () => {
                     }
                 })
             }
+            // keyboard melayang diatas Tab navigasi
             keyboardHidesTabBar={true}
         >
-            {/* <Tab.Screen name="homeTab" component={HomeTab} options={{ tabBarLabel: 'Home' }} /> */}
-            <Tab.Screen name="historyTab" component={HistoryTab} options={{ tabBarLabel: 'History' }} />
+            {/* isi dari Tab navigasi */}
+            <Tab.Screen name="orderList" component={OrderList} options={{ tabBarLabel: 'Daftar Pesanan' }} />
+            <Tab.Screen name="orderHist" component={OrderHistory} options={{ tabBarLabel: 'Riwayat Pesanan' }} />
             <Tab.Screen name="userTab" component={User} options={{ tabBarLabel: 'User' }} />
         </Tab.Navigator>
     )
@@ -105,6 +122,7 @@ export const reducer = (prevState, action) => {
     }
 }
 
+// component routes untuk navigasi
 const Routes = () => {
     const baseUrl = `http://192.168.0.76:80/Laravel/shoeApp/public/api`
     const [state, dispatch] = useReducer(
@@ -144,16 +162,20 @@ const Routes = () => {
                 } else {
                     let endpoint
                     if (isMitra) {
-                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/partners/login`
+                        endpoint = `${baseUrl}/partners/login`
                     } else {
-                        endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/login`
+                        endpoint = `${baseUrl}/login`
                     }
 
-                    let response = await axios.post(endpoint, data)
-                    // console.log('cek respon dari route', response.data)
-                    const { token, user } = response.data
-                    await AsyncStorage.setItem('userToken', JSON.stringify(token))
-                    dispatch({ type: 'SIGN_IN', token, user, isMitra })
+                    try {
+                        let response = await axios.post(endpoint, data)
+                        const { token, user } = response.data
+                        dispatch({ type: 'SIGN_IN', token, user, isMitra })
+                    } catch (error) {
+                        if (error.response.data.error == 'invalid_credentials') {
+                            Alert.alert('Login Gagal', 'Masukkan Email dan Password yang terdaftar')
+                        }
+                    }
                 }
             },
             signOut: async () => {
@@ -161,10 +183,21 @@ const Routes = () => {
                 dispatch({ type: 'SIGN_OUT' })
             },
             signUp: async data => {
-                // let endpoint = 'localhost:8000/api/register'
-                // let rensponse = await axios.post(endpoint, data)
+                if (data.name == null || data.name == '' || data.email == null || data.email == '' || data.password == null || data.password == '') {
+                    Alert.alert('', 'Harap isi semua kolom!')
+                } else {
+                    let endpoint = `${baseUrl}/register`
 
-                dispatch({ type: 'SIGN_IN', token: 'dummy-token' })
+                    try {
+                        let response = await axios.post(endpoint, data)
+
+                        const { token, user } = response.data
+
+                        dispatch({ type: 'SIGN_IN', token, user, isMitra: data.isMitra })
+                    } catch (error) {
+                        console.log(error.response)
+                    }
+                }
             },
         }),
         []
@@ -188,15 +221,15 @@ const Routes = () => {
                                     <Stack.Screen name="home" component={Home} />
                                 }
                                 <Stack.Screen name="order" component={Order} options={{ headerShown: true, title: '' }} />
-                                <Stack.Screen name="history" component={History} options={{ headerShown: true, title: 'History' }} />
+                                <Stack.Screen name="history" component={History} options={{ headerShown: true, title: 'Riwayat' }} />
                                 <Stack.Screen name="map" component={Map} options={{ headerShown: true, title: 'Map' }} />
                                 <Stack.Screen name="shop" component={Shop} />
                                 <Stack.Screen name="createService" component={CreateService} />
                                 <Stack.Screen name="shopSettings" component={ShopSettings} />
                                 <Stack.Screen name="shopView" component={ShopView} />
+                                <Stack.Screen name="orderListDetail" component={OrderListDetail} options={{ headerShown: true, title: 'Detail Pesanan' }} />
                                 <Stack.Screen name="imagePicker" component={ImagePickers} options={{ headerShown: true, title: '' }} />
                             </Stack.Navigator>
-
                         )
                 }
             </AuthContext.Provider>

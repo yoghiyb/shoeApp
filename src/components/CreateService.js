@@ -16,7 +16,7 @@ const serviceItem = [
 
 const CreateService = ({ navigation, route }) => {
     const { isEdit, item } = route.params
-    const [state] = useContext(AuthContext)
+    const [state, auth, baseUrl] = useContext(AuthContext)
     const [service, setService] = useState(null)
     const [unit, setUnit] = useState(null)
     const [price, setPrice] = useState(null)
@@ -61,12 +61,12 @@ const CreateService = ({ navigation, route }) => {
             let response
 
             if (isEdit) {
-                endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/service/${item.id}`
+                endpoint = `${baseUrl}/service/${item.id}`
                 response = await axios.put(endpoint, body, { headers })
             }
 
             if (!isEdit) {
-                endpoint = `http://192.168.0.76:80/Laravel/shoeApp/public/api/service`
+                endpoint = `${baseUrl}/service`
                 response = await axios.post(endpoint, body, { headers })
             }
 

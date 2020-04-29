@@ -1,27 +1,49 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, Image, Dimensions, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { AuthContext } from '../settings/Routes'
 
 var { width, height } = Dimensions.get("window")
 
 const Register = ({ navigation }) => {
+    const [state, auth, baseUrl] = useContext(AuthContext)
+
+    const [name, setName] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+
+    const isMitra = false
+
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
             <Image source={require('../assets/images/sepatu_vans.png')} style={{ width: 150, height: 150, marginBottom: 20, resizeMode: "contain" }} />
             <Text style={styles.registerTitle} >Register</Text>
             <View style={{ position: "relative" }} >
                 <Icon name="user-alt" size={30} style={{ position: "absolute", top: 10 }} />
-                <TextInput placeholder="Username" style={styles.inputUsername} />
+                <TextInput
+                    placeholder="Username"
+                    style={styles.inputUsername}
+                    onChangeText={text => setName(text)}
+                />
             </View>
             <View style={{ position: "relative" }} >
                 <Icon name="envelope" size={30} style={{ position: "absolute", top: 10 }} />
-                <TextInput placeholder="Email" style={styles.inputEmail} />
+                <TextInput
+                    placeholder="Email"
+                    style={styles.inputEmail}
+                    onChangeText={email => setEmail(email)}
+                />
             </View>
             <View style={{ position: "relative" }} >
                 <Icon name="lock" size={30} style={{ position: "absolute", top: 10 }} />
-                <TextInput placeholder="Password" secureTextEntry={true} style={styles.inputPassword} />
+                <TextInput
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    style={styles.inputPassword}
+                    onChangeText={pass => setPassword(pass)}
+                />
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => auth.signUp({ name, email, password, isMitra })} >
                 <View style={styles.registerBtn} elevation={2} >
                     <Text style={{ fontSize: 20, fontStyle: "italic", fontWeight: "bold" }} >Register</Text>
                 </View>
